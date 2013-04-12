@@ -50,7 +50,7 @@ namespace GeneratorsTests
                A = One.Of(1, 2, 3),
                B = One.Of("a", "b", "c"),
                C = One.Of(true, false, (bool?)null)
-            });
+            }, 0);
 
          Print(results);
       }
@@ -64,7 +64,7 @@ namespace GeneratorsTests
                A = One.Of(1, 2, 3),
                B = One.Of("a", "b", "c"),
                C = One.Of(true, false, (bool?)null)
-            }).Take(100);
+            }, 0).Take(100);
 
          Print(results);
       }
