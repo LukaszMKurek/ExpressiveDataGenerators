@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressiveDataGenerators", "TestDataGenerators\ExpressiveDataGenerators.csproj", "{6980A241-DA4B-458F-9CB1-479FE424A465}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressiveDataGenerators", "ExpressiveDataGenerators\ExpressiveDataGenerators.csproj", "{6980A241-DA4B-458F-9CB1-479FE424A465}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratorsTests", "GeneratorsTests\GeneratorsTests.csproj", "{5C02F489-E960-4E40-8EB3-862FBA8B5F37}"
 EndProject
