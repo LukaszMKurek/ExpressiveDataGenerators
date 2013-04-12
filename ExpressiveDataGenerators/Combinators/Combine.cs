@@ -30,35 +30,40 @@ namespace ExpressiveDataGenerators
       /// <summary>
       /// Execute random step combination.
       /// </summary>
-      public static IEnumerable<T> Random<T>(Action<GenerateSetup<T>> cfg)
+      public static IEnumerable<T> Random<T>(Action<GenerateSetup<T>> cfg, int? seed = null)
          where T : new()
       {
-         return Random(() => new T(), cfg);
+          return Random(() => new T(), cfg, seed);
       }
 
       /// <summary>
       /// Execute random step combination.
       /// </summary>
-      public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
+      public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> cfg, int? seed = null)
       {
-         return GenerateSequence(creator, cfg, CombinationStrategies.Random);
+          return GenerateSequence(creator, cfg, i => CombinationStrategies.Random(i, seed));
       }
 
       /// <summary>
-      /// Execute all pair step combination.
+      /// Execute all pairs step combination.
       /// </summary>
-      public static IEnumerable<T> AllPairs<T>(Action<GenerateSetup<T>> cfg)
+      /// <param name="n">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<T> AllPairs<T>(Action<GenerateSetup<T>> cfg, int? seed = null, int n = 1)
          where T : new()
       {
-         return AllPairs(() => new T(), cfg);
+         return AllPairs(() => new T(), cfg, seed, n);
       }
 
       /// <summary>
-      /// Execute all pair step combination.
+      /// Execute all pairs step combination.
       /// </summary>
-      public static IEnumerable<T> AllPairs<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
+      /// <param name="n">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<T> AllPairs<T>(Func<T> creator, Action<GenerateSetup<T>> cfg, int? seed = null, int n = 1)
       {
-         return GenerateSequence(creator, cfg, i => CombinationStrategies.AllPairs(i, (int)DateTime.UtcNow.Ticks, 2));
+         seed = seed ?? (int)DateTime.UtcNow.Ticks;
+         for (int i = 0; i < n; i++)
+             foreach (T item in GenerateSequence(creator, cfg, x => CombinationStrategies.AllPairs(x, seed++, 2)))
+                 yield return item;
       }
 
       private static IEnumerable<T> GenerateSequence<T>(

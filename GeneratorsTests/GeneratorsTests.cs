@@ -133,7 +133,7 @@ namespace GeneratorsTests
       {
          var rnd = new Random(0);
          int l = 3;
-         var results = Generate.Random(
+         var results = Generate.Randoms(
             i =>
                new
                {

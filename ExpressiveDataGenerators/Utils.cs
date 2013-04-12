@@ -17,13 +17,13 @@ namespace ExpressiveDataGenerators.Utils
                from item in sequence
                select accseq.Concat(new[] { item }));
       }
-
-      public static IEnumerable<IEnumerable<T>> Random<T>(this IEnumerable<IEnumerable<T>> sequences)
+       
+      public static IEnumerable<IEnumerable<T>> Random<T>(this IEnumerable<IEnumerable<T>> sequences, int? seed)
       {
-         var rnd = new Random();
-         T[][] data = sequences.Select(i => i.ToArray()).ToArray();
-         while (true)
-            yield return data.Select(i => i[rnd.Next(i.Length)]);
+          var rnd = new Random(seed ?? (int)DateTime.UtcNow.Ticks);
+          T[][] data = sequences.Select(i => i.ToArray()).ToArray();
+          while (true)
+              yield return data.Select(i => i[rnd.Next(i.Length)]);
       }
 
       private sealed class SequenceHelper<T>
@@ -69,7 +69,7 @@ namespace ExpressiveDataGenerators.Utils
             yield return data.Select(i => i[n]);
       }
 
-      public static IEnumerable<IEnumerable<T>> AllPairs<T>(this IEnumerable<IEnumerable<T>> sequences, int seed = 0, int order = 2)
+      public static IEnumerable<IEnumerable<T>> AllPairs<T>(this IEnumerable<IEnumerable<T>> sequences, int? seed = null, int order = 2)
       {
          var p = new List<ParameterBase>();
          int n = 0;
@@ -83,10 +83,10 @@ namespace ExpressiveDataGenerators.Utils
          }
          var model = new Model(p);
 
-         return model.GenerateVariations(order, seed).Select(variation => p.Select(i => (T)variation[i.Name]));
+         return model.GenerateVariations(order, seed ?? (int)DateTime.UtcNow.Ticks).Select(variation => p.Select(i => (T)variation[i.Name]));
       }
 
-      internal static IEnumerable<IEnumerable<object>> AllPairs(IEnumerable<ParameterSpec> parametersSpec, int seed, int order)
+      internal static IEnumerable<IEnumerable<object>> AllPairs(IEnumerable<ParameterSpec> parametersSpec, int? seed, int order)
       {
          var p = new List<ParameterBase>();
          foreach (ParameterSpec parameterSpec in parametersSpec)
@@ -99,7 +99,7 @@ namespace ExpressiveDataGenerators.Utils
          }
          var model = new Model(p);
 
-         return model.GenerateVariations(order, seed).Select(variation => p.Select(i => variation[i.Name]));
+         return model.GenerateVariations(order, seed ?? (int)DateTime.UtcNow.Ticks).Select(variation => p.Select(i => variation[i.Name]));
       }
    }
 }

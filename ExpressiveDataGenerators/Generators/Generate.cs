@@ -7,12 +7,12 @@ using ExpressiveDataGenerators.Utils;
 namespace ExpressiveDataGenerators
 {
    /// <summary>
-   ///    Generate test case seqences.
+   /// Generate test case seqences.
    /// </summary>
    public static class Generate // todo jak rozszeżać? partial wypali?
    {
       /// <summary>
-      ///    Generate cartesian product of values specisied in One.Of(...)
+      /// Generate cartesian product of values specisied in One.Of(...)
       /// </summary>
       public static IEnumerable<TItem> AllCombinations<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
@@ -20,11 +20,11 @@ namespace ExpressiveDataGenerators
       }
 
       /// <summary>
-      /// Generate random tuple of values specisied in One.Of(...)
+      /// Generate infinitive random tuple of values specisied in One.Of(...)
       /// </summary>
-      public static IEnumerable<TItem> Random<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
+      public static IEnumerable<TItem> Randoms<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int? seed = null)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.Random);
+         return GenerateSequenceFrom(itemGeneratorExpression, i => CombinationStrategies.Random(i, seed));
       }
 
       /// <summary>
@@ -85,24 +85,28 @@ namespace ExpressiveDataGenerators
       /// <summary>
       /// Generate all pairs of values specisied in One.Of(...)
       /// </summary>
-      public static IEnumerable<TItem> AllPairs<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int n = 1)
+      /// <param name="n">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<TItem> AllPairs<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int? seed = null, int n = 1)
       {
+         seed = seed ?? (int)DateTime.UtcNow.Ticks;
          for (int i = 0; i < n; i++) // todo: parsed several time, side effects, 
-            foreach (TItem row in AllPairsInternal(itemGeneratorExpression, (int)DateTime.UtcNow.Ticks, 2))
+            foreach (TItem row in AllPairsInternal(itemGeneratorExpression, seed++, 2))
                yield return row;
       }
 
       /// <summary>
       /// Generate all pairs of values specisied in One.Of(...)
       /// </summary>
-      public static IEnumerable<TItem> AllTuple<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int order, int n = 1)
+      /// <param name="n">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<TItem> AllTuples<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int order, int? seed = null, int n = 1)
       {
+         seed = seed ?? (int)DateTime.UtcNow.Ticks;
          for (int i = 0; i < n; i++)
-            foreach (TItem row in AllPairsInternal(itemGeneratorExpression, (int)DateTime.UtcNow.Ticks, order))
+            foreach (TItem row in AllPairsInternal(itemGeneratorExpression, seed++, order))
                yield return row;
       }
 
-      private static IEnumerable<TItem> AllPairsInternal<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int seed, int order)
+      private static IEnumerable<TItem> AllPairsInternal<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int? seed, int order)
       {
          if (itemGeneratorExpression == null)
             throw new ArgumentNullException("itemGeneratorExpression");

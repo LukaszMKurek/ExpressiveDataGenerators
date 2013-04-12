@@ -58,7 +58,7 @@ namespace GeneratorsTests
       [Test]
       public void Random100()
       {
-         var results = Generate.Random(itemNumber =>
+         var results = Generate.Randoms(itemNumber =>
             new
             {
                A = One.Of(1, 2, 3),
