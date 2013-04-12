@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>ExpressiveDataGenerators</id>
+        <version>$version$</version>
+        <title>ExpressiveDataGenerators</title>
+        <authors>$author$</authors>
+        <licenseUrl>https://expressivedatagenerators.codeplex.com/license</licenseUrl>
+        <projectUrl>https://expressivedatagenerators.codeplex.com/</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>$description$</description>
+        <summary>Library generate of fill by data, based no clear specyfication.</summary>
+        <releaseNotes>First release</releaseNotes>
+        <copyright>Lukasz K.</copyright>
+        <tags>test, cases, data, generator, random, sequential, all pairs, combinatioral, cartesian</tags>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1" />
+            <frameworkAssembly assemblyName="System.Core" targetFramework=".NETFramework4.0, .NETFramework4.5, .NETFramework4.5.1" />
+        </frameworkAssemblies>
+    </metadata>
+</package>

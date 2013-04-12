@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestDataGenerators", "TestDataGenerators\TestDataGenerators.csproj", "{6980A241-DA4B-458F-9CB1-479FE424A465}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpressiveDataGenerators", "TestDataGenerators\ExpressiveDataGenerators.csproj", "{6980A241-DA4B-458F-9CB1-479FE424A465}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneratorsTests", "GeneratorsTests\GeneratorsTests.csproj", "{5C02F489-E960-4E40-8EB3-862FBA8B5F37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C234F7B0-37EA-43B4-8D83-0BF97FBA0F5F}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
