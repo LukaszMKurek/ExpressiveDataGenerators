@@ -13,7 +13,7 @@ namespace TestDataGenerators
       /// <summary>
       ///    Generate cartesian product of values specisied in One.Of(...)
       /// </summary>
-      public static IEnumerable<TItem> AllCombination<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
+      public static IEnumerable<TItem> AllCombinations<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
          return GenerateSequenceFrom(itemGeneratorExpression, Utils.CartesianProduct);
       }

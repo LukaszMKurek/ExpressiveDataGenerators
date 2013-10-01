@@ -12,16 +12,16 @@ namespace TestDataGenerators.Combinators
       /// <summary>
       /// Execute each step combination.
       /// </summary>
-      public static IEnumerable<T> AllCases<T>(Action<GenerateSetup<T>> cfg)
+      public static IEnumerable<T> AllCombinations<T>(Action<GenerateSetup<T>> cfg)
          where T : new()
       {
-         return AllCases(() => new T(), cfg);
+         return AllCombinations(() => new T(), cfg);
       }
 
       /// <summary>
       /// Execute each step combination.
       /// </summary>
-      public static IEnumerable<T> AllCases<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
+      public static IEnumerable<T> AllCombinations<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
       {
          return GenerateSequence(creator, cfg, Utils.CartesianProduct);
       }
