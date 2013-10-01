@@ -3,9 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
-    public struct ParameterSpec
+    internal struct ParameterSpec
     {
         public readonly int Key;
         public readonly string ParameterName;

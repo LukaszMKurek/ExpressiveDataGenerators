@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using ExpressiveDataGenerators.Utils;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
    /// <summary>
    ///    Generate test case seqences.
@@ -15,7 +16,7 @@ namespace TestDataGenerators
       /// </summary>
       public static IEnumerable<TItem> AllCombinations<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, Utils.CartesianProduct);
+         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.CartesianProduct);
       }
 
       /// <summary>
@@ -23,7 +24,7 @@ namespace TestDataGenerators
       /// </summary>
       public static IEnumerable<TItem> Random<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, Utils.Random);
+         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.Random);
       }
 
       /// <summary>
@@ -31,7 +32,7 @@ namespace TestDataGenerators
       /// </summary>
       public static IEnumerable<TItem> Sequence<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, Utils.Sequence);
+         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.Sequence);
       }
 
       /// <summary>
@@ -39,7 +40,7 @@ namespace TestDataGenerators
       /// </summary>
       public static IEnumerable<TItem> SequenceInfinitive<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, Utils.InfinitiveSequence);
+         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.InfinitiveSequence);
       }
 
       /// <summary>
@@ -47,7 +48,7 @@ namespace TestDataGenerators
       /// </summary>
       public static IEnumerable<TItem> SequenceStrict<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
       {
-         return GenerateSequenceFrom(itemGeneratorExpression, Utils.StrictSequence);
+         return GenerateSequenceFrom(itemGeneratorExpression, CombinationStrategies.StrictSequence);
       }
 
       private static IEnumerable<TItem> GenerateSequenceFrom<TItem>(
@@ -114,7 +115,7 @@ namespace TestDataGenerators
             GeneratorRewriterHelper.AnalyzeAndRewriteItemGenerator<TItem, ValueGetter>(itemGeneratorExpression, (key, expr) => "");
          Func<int, ValueGetter, TItem> rewritedItemGenerator = result.RewritedItemGeneratorExpression.Compile();
 
-         IEnumerable<IEnumerable<object>> sequence = Utils.AllPairs(result.DataList, seed, order);
+         IEnumerable<IEnumerable<object>> sequence = CombinationStrategies.AllPairs(result.DataList, seed, order);
          return sequence.Select((data, n) => rewritedItemGenerator(n, new ValueGetter(data.ToArray())));
       }
       /*

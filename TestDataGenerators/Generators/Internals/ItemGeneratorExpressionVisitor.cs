@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq.Expressions;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
     /// <summary>
     /// Notifi found data source. Rewrite data source definition to value getter expression.

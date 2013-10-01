@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq.Expressions;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
-    public static class GeneratorRewriterHelper
+    internal static class GeneratorRewriterHelper
     {
         public static ItemGeneratorRewriteResult<TItem, TValueGetter> AnalyzeAndRewriteItemGenerator<TItem, TValueGetter>(
             Expression<Func<int, TItem>> itemGenerator,

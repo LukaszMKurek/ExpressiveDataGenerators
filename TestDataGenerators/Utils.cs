@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Test.VariationGeneration;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators.Utils
 {
-   public static class Utils
+   public static class CombinationStrategies
    {
       public static IEnumerable<IEnumerable<T>> CartesianProduct<T>(this IEnumerable<IEnumerable<T>> sequences)
       {
@@ -86,7 +86,7 @@ namespace TestDataGenerators
          return model.GenerateVariations(order, seed).Select(variation => p.Select(i => (T)variation[i.Name]));
       }
 
-      public static IEnumerable<IEnumerable<object>> AllPairs(IEnumerable<ParameterSpec> parametersSpec, int seed, int order)
+      internal static IEnumerable<IEnumerable<object>> AllPairs(IEnumerable<ParameterSpec> parametersSpec, int seed, int order)
       {
          var p = new List<ParameterBase>();
          foreach (ParameterSpec parameterSpec in parametersSpec)

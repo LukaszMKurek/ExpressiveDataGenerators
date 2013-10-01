@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
    /// <summary>
    ///    Specifi posible values that can be returned.

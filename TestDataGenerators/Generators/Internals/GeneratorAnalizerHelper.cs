@@ -5,9 +5,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
-    public static class GeneratorAnalizerHelper
+    internal static class GeneratorAnalizerHelper
     {
         public static Dictionary<MethodCallExpression, string> FindAllProperUsePlaceHolderMethod(Expression itemGeneratorExpression)
         {

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
-    public interface IValueGetter
+    internal interface IValueGetter
     {
         T GetValue<T>(int key);
     }

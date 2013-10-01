@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System;
 using System.Linq.Expressions;
 
-namespace TestDataGenerators
+namespace ExpressiveDataGenerators
 {
-    public struct ItemGeneratorRewriteResult<TItem, TValueGetter>
+    internal struct ItemGeneratorRewriteResult<TItem, TValueGetter>
         where TValueGetter : IValueGetter
     {
         public readonly Expression<Func<int, TValueGetter, TItem>> RewritedItemGeneratorExpression;

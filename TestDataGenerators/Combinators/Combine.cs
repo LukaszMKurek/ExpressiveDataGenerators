@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ExpressiveDataGenerators.Utils;
 
-namespace TestDataGenerators.Combinators
+namespace ExpressiveDataGenerators
 {
    /// <summary>
    /// When we have several step to execute with serveral variations each, class can execute for example each combinaion or each pairs of step variations.
@@ -23,7 +24,7 @@ namespace TestDataGenerators.Combinators
       /// </summary>
       public static IEnumerable<T> AllCombinations<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
       {
-         return GenerateSequence(creator, cfg, Utils.CartesianProduct);
+         return GenerateSequence(creator, cfg, CombinationStrategies.CartesianProduct);
       }
 
       /// <summary>
@@ -40,7 +41,7 @@ namespace TestDataGenerators.Combinators
       /// </summary>
       public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
       {
-         return GenerateSequence(creator, cfg, Utils.Random);
+         return GenerateSequence(creator, cfg, CombinationStrategies.Random);
       }
 
       /// <summary>
@@ -57,7 +58,7 @@ namespace TestDataGenerators.Combinators
       /// </summary>
       public static IEnumerable<T> AllPairs<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
       {
-         return GenerateSequence(creator, cfg, i => Utils.AllPairs(i, (int)DateTime.UtcNow.Ticks, 2));
+         return GenerateSequence(creator, cfg, i => CombinationStrategies.AllPairs(i, (int)DateTime.UtcNow.Ticks, 2));
       }
 
       private static IEnumerable<T> GenerateSequence<T>(
