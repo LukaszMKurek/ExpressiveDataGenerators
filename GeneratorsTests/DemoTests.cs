@@ -12,12 +12,115 @@ namespace GeneratorsTests
       [Test]
       public void AllCombination()
       {
+         var results = Generate.AllCombinations(itemNumber =>
+            new
+            {
+               A = One.Of(1, 2, 3),
+               B = One.Of("a", "b", "c"),
+               C = One.Of(true, false, (bool?)null)
+            });
+
+         Print(results);
+      }
+
+      [Test]
+      public void AllCombination_2()
+      {
+         var results = Generate.AllCombinations(itemNumber =>
+            SomeExampleFunc( // Suprise: Named parameters are not suppoted in Expressions Tress
+               One.Of(1, 2, 3),
+               One.Of("a", "b", "c"),
+               One.Of(true, false)
+            ));
+
+         Print(results);
+      }
+
+      private string SomeExampleFunc(int a, string b, bool c)
+      {
+         return a + b + c;
+      }
+
+      [Test]
+      public void AllPairs()
+      {
+         var results = Generate.AllPairs(itemNumber =>
+            new
+            {
+               A = One.Of(1, 2, 3),
+               B = One.Of("a", "b", "c"),
+               C = One.Of(true, false, (bool?)null)
+            });
+
+         Print(results);
+      }
+
+      [Test]
+      public void Random100()
+      {
+         var results = Generate.Random(itemNumber =>
+            new
+            {
+               A = One.Of(1, 2, 3),
+               B = One.Of("a", "b", "c"),
+               C = One.Of(true, false, (bool?)null)
+            }).Take(100);
+
+         Print(results);
+      }
+
+      [Test]
+      public void SequentialStrict()
+      {
+         var results = Generate.SequenceStrict(itemNumber =>
+            new
+            {
+               A = One.Of(1, 2, 3),
+               B = One.Of("a", "b", "c"),
+               C = One.Of(true, false, (bool?)null)
+            }).Take(100);
+
+         Print(results);
+      }
+
+      [Test]
+      public void AllCombination_Alternative_1()
+      {
+         // First delegate create subject or only inject subject 
+         var results = Combine.AllCombinations(() => new Obj(), setup =>
+         {
+            setup.OneOf( // execute one alternative from set
+               subject => subject.SetA(1), // first alternative
+               subject => subject.SetA(2)); // second alternative
+            setup.OneOf(
+               subject => subject.B = 4,
+               subject => subject.B = 5);
+         });
+
+         Print(results);
+      }
+
+      [Test]
+      public void AllCombination_Alternative_2()
+      {
+         var results = Combine.AllCombinations(() => new Obj(), setup =>
+         {
+            setup.SetOneOf((subject, value) => subject.SetA(value), 1, 2);
+            setup.SetOneOf((subject, value) => subject.B = value, 4, 5);
+         });
+
+         Print(results);
+      }
+
+      [Test]
+      public void AllCombination_MoreComplicated()
+      {
          var rnd = new Random(0);
          const int l = 3;
-         A[] results = Generate.AllCombinations(i => // Generate sequence of object A. Each object was created with different combination of possible values defined by methods One.Of(...)
+         var results = Generate.AllCombinations(i => 
             new A
             {
-               P1 = One.Of(1, 2 * l, 3), // Method define posible values that they can return. One.Of(...) will be newer call. During Expression rewrite it was replaced.
+               P1 = One.Of(1, 2 * l, 3), 
                P2 = new B
                {
                   P1 = One.Of(1, 2) == 1 ? 2 : 3,
@@ -28,39 +131,55 @@ namespace GeneratorsTests
 
          Assert.That(results.Length, Is.EqualTo(6));
 
-         string str = results.Aggregate("", (current, obj) => current + (obj + "\n")).Trim();
-         Console.WriteLine(str);
+         Print(results);
+      }
+
+      [Test]
+      public void AllCombination_Alternative_WithSkipInvalidCombination()
+      {
+         var results = Combine.AllCombinations(() => new Obj(), setup =>
+         {
+            setup.SetOneOf((subject, value) => subject.SetA(value), 1, 2);
+            setup.SetOneOf((subject, value) => subject.B = value, 4, 5);
+            setup.OneOf(subject =>
+            {
+               if (subject.A == 1 && subject.B == 4)
+                  setup.SkipCase();
+
+               subject.C = subject.A + subject.B;
+            });
+         });
+
+         Print(results);
       }
 
       [Test]
       public void Combinators()
       {
-         Obj[] seq = Combine.AllCombinations<Obj>(cfg =>    // Generate sequence of object type Obj. Each object will be initialized by unique combination of step alternatives
+         var results = Combine.AllCombinations<Obj>(cfg => 
          {
-            cfg.OneOf(o => o.SetA(5), o => o.A = 6);    // One build step can have serveral variants. In this examle parameters "o" are instance of class Obj
-            cfg.SetOneOf((o, val) => o.SetB(val), 1, 2, 3);    // One build step can be made with several diferent input data
+            cfg.OneOf(o => o.SetA(5), o => o.A = 6); 
+            cfg.SetOneOf((o, val) => o.SetB(val), 1, 2, 3); 
             cfg.OneOf(
                o => o.C = 4,
                o =>
                {
                   if (o.A == 5 && o.B == 2)
-                     cfg.SkipCase();     // Some combinations can be invalid so we can skip it
+                     cfg.SkipCase(); 
                   if (o.A == 6 && o.B == 2)
                      o.C = 1;
                   else
                      o.C = 7;
                });
-         }).ToArray(); // Return lazy IEnumerable<Obj>
+         });
 
-         string seqStr = seq.Aggregate("", (current, obj) => current + (obj + "\n")).Trim();
-
-         Console.WriteLine(seqStr);
+         Print(results);
       }
 
       [Test]
       public void Combinators_alternative_usage()
       {
-         Obj[] seq = Combine.AllCombinations(() => new Obj(), cfg => // First delegate deliver object that will be subject of step alternatives
+         var results = Combine.AllCombinations(() => new Obj(), cfg => // First delegate deliver object that will be subject of step alternatives
          {
             cfg.OneOf(o => o.SetA(5), o => o.A = 6);
             cfg.SetOneOf((o, val) => o.SetB(val), 1, 2).OrOneOf((o, val) => o.SetB(val), 3);
@@ -75,11 +194,15 @@ namespace GeneratorsTests
                   else
                      o.C = 7;
                });
-         }).ToArray();
+         });
 
-         string seqStr = seq.Aggregate("", (current, obj) => current + (obj + "\n")).Trim();
+         Print(results);
+      }
 
-         Console.WriteLine(seqStr);
+      private static void Print<T>(IEnumerable<T> results)
+      {
+         string str = results.Aggregate("", (current, obj) => current + (obj + "\n")).Trim();
+         Console.WriteLine(str);
       }
    }
 }

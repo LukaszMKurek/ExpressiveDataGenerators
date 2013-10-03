@@ -58,8 +58,6 @@ namespace ExpressiveDataGenerators
          if (itemGeneratorExpression == null)
             throw new ArgumentNullException("itemGeneratorExpression");
 
-         GeneratorAnalizerHelper.ValidateItemGeneratorExpression(itemGeneratorExpression.Body);
-
          ItemGeneratorRewriteResult<TItem, ValueGetter> result =
             GeneratorRewriterHelper.AnalyzeAndRewriteItemGenerator<TItem, ValueGetter>(itemGeneratorExpression, (key, expr) => "");
          Func<int, ValueGetter, TItem> rewritedItemGenerator = result.RewritedItemGeneratorExpression.Compile();
@@ -89,7 +87,7 @@ namespace ExpressiveDataGenerators
       /// </summary>
       public static IEnumerable<TItem> AllPairs<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int n = 1)
       {
-         for (int i = 0; i < n; i++)
+         for (int i = 0; i < n; i++) // todo: parsed several time, side effects, 
             foreach (TItem row in AllPairsInternal(itemGeneratorExpression, (int)DateTime.UtcNow.Ticks, 2))
                yield return row;
       }
@@ -108,8 +106,6 @@ namespace ExpressiveDataGenerators
       {
          if (itemGeneratorExpression == null)
             throw new ArgumentNullException("itemGeneratorExpression");
-
-         GeneratorAnalizerHelper.ValidateItemGeneratorExpression(itemGeneratorExpression.Body);
 
          ItemGeneratorRewriteResult<TItem, ValueGetter> result =
             GeneratorRewriterHelper.AnalyzeAndRewriteItemGenerator<TItem, ValueGetter>(itemGeneratorExpression, (key, expr) => "");

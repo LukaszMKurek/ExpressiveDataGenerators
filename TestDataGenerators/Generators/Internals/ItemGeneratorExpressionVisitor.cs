@@ -23,10 +23,10 @@ namespace ExpressiveDataGenerators
             _onFoundDataSource = onFoundDataSource;
         }
 
-        protected override Expression VisitMethodCall(MethodCallExpression node)
+       protected override Expression VisitMethodCall(MethodCallExpression node)
         {
             if ((node.Method.Name == "Of" && node.Method.DeclaringType == typeof(One)) == false) // todo rozwarzyć przeciążone
-                return node;
+                return base.VisitMethodCall(node);
 
             _currentKey += 1;
 
