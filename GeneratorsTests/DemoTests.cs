@@ -70,6 +70,20 @@ namespace GeneratorsTests
       }
 
       [Test]
+      public void Sequential()
+      {
+         var results = Generate.Sequence(itemNumber =>
+            new
+            {
+               A = One.Of(1, 2, 3, 4, 5),
+               B = One.Of("a", "b"),
+               C = One.Of(true, false)
+            }).Take(100);
+
+         Print(results);
+      }
+
+      [Test]
       public void SequentialStrict()
       {
          var results = Generate.SequenceStrict(itemNumber =>

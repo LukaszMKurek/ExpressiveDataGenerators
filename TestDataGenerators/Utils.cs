@@ -34,7 +34,7 @@ namespace ExpressiveDataGenerators.Utils
 
       public static IEnumerable<IEnumerable<T>> Sequence<T>(this IEnumerable<IEnumerable<T>> sequences)
       {
-         SequenceHelper<T>[] data = sequences.Select(i => new SequenceHelper<T> { Array = i.ToArray(), Index = 0 }).ToArray();
+         SequenceHelper<T>[] data = sequences.Select(i => new SequenceHelper<T> { Array = i.ToArray(), Index = -1 }).ToArray();
          int count = data.Max(i => i.Array.Length);
          for (int n = 0; n < count; n++)
             yield return data.Select(
@@ -48,7 +48,7 @@ namespace ExpressiveDataGenerators.Utils
 
       public static IEnumerable<IEnumerable<T>> InfinitiveSequence<T>(this IEnumerable<IEnumerable<T>> sequences)
       {
-         SequenceHelper<T>[] data = sequences.Select(i => new SequenceHelper<T> { Array = i.ToArray(), Index = 0 }).ToArray();
+         SequenceHelper<T>[] data = sequences.Select(i => new SequenceHelper<T> { Array = i.ToArray(), Index = -1 }).ToArray();
          while (true)
             yield return data.Select(i =>
             {
