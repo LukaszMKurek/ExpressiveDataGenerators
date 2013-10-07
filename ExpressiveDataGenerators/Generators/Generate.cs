@@ -86,15 +86,17 @@ namespace ExpressiveDataGenerators
             return (T)Data[key];
          }
       }
-      
+
       /// <summary>
       /// Generate all pairs of values specisied in One.Of(...)
       /// </summary>
-      /// <param name="n">How many base AllPair will be called with differents seeds</param>
-      public static IEnumerable<TItem> AllPairs<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int? seed = null, int n = 1)
+      /// <param name="seed"></param>
+      /// <param name="sequenceCountMultiplier">How many base AllPair will be called with differents seeds</param>
+      /// <param name="itemGeneratorExpression"></param>
+      public static IEnumerable<TItem> AllPairs<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int? seed = null, int sequenceCountMultiplier = 1)
       {
          seed = seed ?? (int)DateTime.UtcNow.Ticks;
-         for (int i = 0; i < n; i++) // todo: parsed several time, side effects, 
+         for (int i = 0; i < sequenceCountMultiplier; i++) // todo: parsed several time, side effects, 
             foreach (TItem row in AllPairsInternal(itemGeneratorExpression, seed++, 2))
                yield return row;
       }
@@ -102,11 +104,14 @@ namespace ExpressiveDataGenerators
       /// <summary>
       /// Generate all pairs of values specisied in One.Of(...)
       /// </summary>
-      /// <param name="n">How many base AllPair will be called with differents seeds</param>
-      public static IEnumerable<TItem> AllTuples<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int order, int? seed = null, int n = 1)
+      /// <param name="seed"></param>
+      /// <param name="sequenceCountMultiplier">How many base AllPair will be called with differents seeds</param>
+      /// <param name="itemGeneratorExpression"></param>
+      /// <param name="order"></param>
+      public static IEnumerable<TItem> AllTuples<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression, int order, int? seed = null, int sequenceCountMultiplier = 1)
       {
          seed = seed ?? (int)DateTime.UtcNow.Ticks;
-         for (int i = 0; i < n; i++)
+         for (int i = 0; i < sequenceCountMultiplier; i++)
             foreach (TItem row in AllPairsInternal(itemGeneratorExpression, seed++, order))
                yield return row;
       }

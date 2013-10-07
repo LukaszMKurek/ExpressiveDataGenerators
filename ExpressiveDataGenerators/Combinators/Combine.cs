@@ -39,6 +39,7 @@ namespace ExpressiveDataGenerators
       /// Execute random step combination.
       /// </summary>
       /// <param name="configurator"></param>
+      /// <param name="seed"></param>
       public static IEnumerable<T> Random<T>(Action<GenerateSetup<T>> configurator, int? seed = null)
          where T : new()
       {
@@ -50,6 +51,7 @@ namespace ExpressiveDataGenerators
       /// </summary>
       /// <param name="creator">Create subject</param>
       /// <param name="configurator"></param>
+      /// <param name="seed"></param>
       public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> configurator, int? seed = null)
       {
          if (creator == null)
