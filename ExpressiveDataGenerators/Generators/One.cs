@@ -5,14 +5,14 @@ using System.Linq;
 namespace ExpressiveDataGenerators
 {
    /// <summary>
-   ///    Specifi posible values that can be returned.
+   /// Specifi possible values that can be returned.
    /// </summary>
    public static class One
    {
       /// <summary>
-      ///    Specifi posible values that can be returned.
+      /// Function would not be called. They only specifi a possible values that can be inserted instead function call.
       /// </summary>
-      public static T Of<T>(params T[] a) // todo wersja z nazwą parametru rozwiązywała by problem ze ścieżką parametru
+      public static T Of<T>(params T[] items) // todo wersja z nazwą parametru rozwiązywała by problem ze ścieżką parametru
       {
          throw new InvalidOperationException("Function can not be call directly.");
       }

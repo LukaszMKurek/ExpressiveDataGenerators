@@ -63,25 +63,30 @@ namespace ExpressiveDataGenerators
          Func<int, ValueGetter, TItem> rewritedItemGenerator = result.RewritedItemGeneratorExpression.Compile();
 
          IEnumerable<IEnumerable<object>> sequence = sequenceGenerator(result.DataList.Select(i => i.PossibleValues.Cast<object>()));
-            // todo optymalizacja
-         return sequence.Select((data, n) => rewritedItemGenerator(n, new ValueGetter(data.ToArray())));
+
+         int n = 0;
+         var valueGetter = new ValueGetter { Data = new object[result.DataList.Count] };
+         foreach (var data in sequence)
+         {
+            int i = 0;
+            foreach (var o in data)
+               valueGetter.Data[i++] = o;
+
+            yield return rewritedItemGenerator(n++, valueGetter);
+         }
+         //return sequence.Select((data, n) => rewritedItemGenerator(n, new ValueGetter(data.ToArray())));
       }
 
       private struct ValueGetter : IValueGetter
       {
-         private readonly object[] _data;
-
-         public ValueGetter(object[] data)
-         {
-            _data = data;
-         }
+         internal object[] Data;
 
          public T GetValue<T>(int key)
          {
-            return (T)_data[key];
+            return (T)Data[key];
          }
       }
-
+      
       /// <summary>
       /// Generate all pairs of values specisied in One.Of(...)
       /// </summary>
@@ -116,7 +121,18 @@ namespace ExpressiveDataGenerators
          Func<int, ValueGetter, TItem> rewritedItemGenerator = result.RewritedItemGeneratorExpression.Compile();
 
          IEnumerable<IEnumerable<object>> sequence = CombinationStrategies.AllPairs(result.DataList, seed, order);
-         return sequence.Select((data, n) => rewritedItemGenerator(n, new ValueGetter(data.ToArray())));
+
+         int n = 0;
+         var valueGetter = new ValueGetter { Data = new object[result.DataList.Count] };
+         foreach (var data in sequence)
+         {
+            int i = 0;
+            foreach (var o in data)
+               valueGetter.Data[i++] = o;
+
+            yield return rewritedItemGenerator(n++, valueGetter);
+         }
+         //return sequence.Select((data, n) => rewritedItemGenerator(n, new ValueGetter(data.ToArray())));
       }
       /*
       public static IEnumerable<TItem> AllPairs2<TItem>(Expression<Func<int, TItem>> itemGeneratorExpression)
