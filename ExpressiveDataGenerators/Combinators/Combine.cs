@@ -13,65 +13,93 @@ namespace ExpressiveDataGenerators
       /// <summary>
       /// Execute each step combination.
       /// </summary>
-      public static IEnumerable<T> AllCombinations<T>(Action<GenerateSetup<T>> cfg)
+      /// <param name="configurator"></param>
+      public static IEnumerable<T> AllCombinations<T>(Action<GenerateSetup<T>> configurator)
          where T : new()
       {
-         return AllCombinations(() => new T(), cfg);
+         return AllCombinations(() => new T(), configurator);
       }
 
       /// <summary>
       /// Execute each step combination.
       /// </summary>
-      public static IEnumerable<T> AllCombinations<T>(Func<T> creator, Action<GenerateSetup<T>> cfg)
+      /// <param name="creator">Create subject</param>
+      /// <param name="configurator"></param>
+      public static IEnumerable<T> AllCombinations<T>(Func<T> creator, Action<GenerateSetup<T>> configurator)
       {
-         return GenerateSequence(creator, cfg, CombinationStrategies.CartesianProduct);
+         if (creator == null)
+            throw new ArgumentNullException("creator");
+         if (configurator == null)
+            throw new ArgumentNullException("configurator");
+
+         return GenerateSequence(creator, configurator, CombinationStrategies.CartesianProduct);
       }
 
       /// <summary>
       /// Execute random step combination.
       /// </summary>
-      public static IEnumerable<T> Random<T>(Action<GenerateSetup<T>> cfg, int? seed = null)
+      /// <param name="configurator"></param>
+      public static IEnumerable<T> Random<T>(Action<GenerateSetup<T>> configurator, int? seed = null)
          where T : new()
       {
-          return Random(() => new T(), cfg, seed);
+          return Random(() => new T(), configurator, seed);
       }
 
       /// <summary>
       /// Execute random step combination.
       /// </summary>
-      public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> cfg, int? seed = null)
+      /// <param name="creator">Create subject</param>
+      /// <param name="configurator"></param>
+      public static IEnumerable<T> Random<T>(Func<T> creator, Action<GenerateSetup<T>> configurator, int? seed = null)
       {
-          return GenerateSequence(creator, cfg, i => CombinationStrategies.Random(i, seed));
+         if (creator == null)
+            throw new ArgumentNullException("creator");
+         if (configurator == null)
+            throw new ArgumentNullException("configurator");
+
+          return GenerateSequence(creator, configurator, i => CombinationStrategies.Random(i, seed));
       }
 
       /// <summary>
       /// Execute all pairs step combination.
       /// </summary>
-      /// <param name="n">How many base AllPair will be called with differents seeds</param>
-      public static IEnumerable<T> AllPairs<T>(Action<GenerateSetup<T>> cfg, int? seed = null, int n = 1)
+      /// <param name="configurator"></param>
+      /// <param name="seed"></param>
+      /// <param name="sequenceCountMultiplier">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<T> AllPairs<T>(Action<GenerateSetup<T>> configurator, int? seed = null, int sequenceCountMultiplier = 1)
          where T : new()
       {
-         return AllPairs(() => new T(), cfg, seed, n);
+         return AllPairs(() => new T(), configurator, seed, sequenceCountMultiplier);
       }
 
       /// <summary>
       /// Execute all pairs step combination.
       /// </summary>
-      /// <param name="n">How many base AllPair will be called with differents seeds</param>
-      public static IEnumerable<T> AllPairs<T>(Func<T> creator, Action<GenerateSetup<T>> cfg, int? seed = null, int n = 1)
+      /// <param name="creator">Create subject</param>
+      /// <param name="configurator"></param>
+      /// <param name="seed"></param>
+      /// <param name="sequenceCountMultiplier">How many base AllPair will be called with differents seeds</param>
+      public static IEnumerable<T> AllPairs<T>(Func<T> creator, Action<GenerateSetup<T>> configurator, int? seed = null, int sequenceCountMultiplier = 1)
       {
+         if (creator == null)
+            throw new ArgumentNullException("creator");
+         if (configurator == null)
+            throw new ArgumentNullException("configurator");
+         if (sequenceCountMultiplier < 1)
+            throw new ArgumentException("sequenceCountMultiplier must be greather than 0.");
+
          seed = seed ?? (int)DateTime.UtcNow.Ticks;
-         for (int i = 0; i < n; i++)
-             foreach (T item in GenerateSequence(creator, cfg, x => CombinationStrategies.AllPairs(x, seed++, 2)))
+         for (int i = 0; i < sequenceCountMultiplier; i++)
+             foreach (T item in GenerateSequence(creator, configurator, x => CombinationStrategies.AllPairs(x, seed++, 2)))
                  yield return item;
       }
 
       private static IEnumerable<T> GenerateSequence<T>(
-         Func<T> creator, Action<GenerateSetup<T>> cfg,
+         Func<T> creator, Action<GenerateSetup<T>> configurator,
          Func<IEnumerable<IEnumerable<Action<T>>>, IEnumerable<IEnumerable<Action<T>>>> sequenceGenerator)
       {
          var setup = new GenerateSetup<T>();
-         cfg(setup);
+         configurator(setup);
 
          foreach (IEnumerable<Action<T>> setups in sequenceGenerator(setup.SetupVariations))
          {
