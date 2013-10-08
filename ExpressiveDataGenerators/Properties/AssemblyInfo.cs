@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ExpressiveDataGenerators")]
-[assembly: AssemblyDescription("Library generate of fill by data, based no clear specyfication.")]
+[assembly: AssemblyDescription("Library generate data, based on clear specification")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Lukasz K.")]
 [assembly: AssemblyProduct("ExpressiveDataGenerators")]

@@ -8,9 +8,9 @@
         <licenseUrl>https://expressivedatagenerators.codeplex.com/license</licenseUrl>
         <projectUrl>https://expressivedatagenerators.codeplex.com/</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>$description$</description>
-        <summary>Library generate of fill by data, based no clear specyfication.</summary>
-        <releaseNotes>First release</releaseNotes>
+        <description>Library to generate data, based on clear specification. Can generate cartesian product, all pairs, random combinations, and more. Can generate random simple data, numerics, string, date, time. Can genereate unique sequence of simple data. Can call API by all possible wariations.</description>
+        <summary>Library generate data, based on clear specification</summary>
+        <releaseNotes>Second alpha release</releaseNotes>
         <copyright>Lukasz K.</copyright>
         <tags>test, cases, data, generator, random, sequential, all pairs, combinatioral, cartesian</tags>
         <frameworkAssemblies>
